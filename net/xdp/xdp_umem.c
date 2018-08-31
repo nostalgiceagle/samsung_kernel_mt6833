@@ -91,8 +91,6 @@ int xdp_umem_assign_dev(struct xdp_umem *umem, struct net_device *dev,
 	if (force_zc && force_copy)
 		return -EINVAL;
 
-	bpf.command = XDP_QUERY_XSK_UMEM;
-
 	rtnl_lock();
 	if (xdp_get_umem_from_qid(dev, queue_id)) {
 		err = -EBUSY;
