@@ -82,7 +82,6 @@ int bpf_verify_program(enum bpf_prog_type type, const struct bpf_insn *insns,
 		       size_t insns_cnt, __u32 prog_flags,
 		       const char *license, __u32 kern_version,
 		       char *log_buf, size_t log_buf_sz, int log_level);
-
 int bpf_map_update_elem(int fd, const void *key, const void *value,
 			__u64 flags);
 
