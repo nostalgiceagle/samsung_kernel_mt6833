@@ -2334,6 +2334,14 @@ union bpf_attr {
  *	Return
  *		0
  *
+ * struct bpf_sock *bpf_sk_fullsock(struct bpf_sock *sk)
+ *	Description
+ *		This helper gets a **struct bpf_sock** pointer such
+ *		that all the fields in bpf_sock can be accessed.
+ *	Return
+ *		A **struct bpf_sock** pointer on success, or NULL in
+ *		case of failure.
+ *
  * u64 bpf_ktime_get_boot_ns(void)
  * 	Description
  * 		Return the time elapsed since system boot, in nanoseconds.
@@ -2588,6 +2596,7 @@ struct __sk_buff {
 	__u64 tstamp;
 	__u32 wire_len;
 	__u32 gso_segs;
+	__bpf_md_ptr(struct bpf_sock *, sk);
 };
 
 struct bpf_tunnel_key {
