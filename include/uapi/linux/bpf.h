@@ -2527,6 +2527,24 @@ union bpf_attr {
  *		**-E2BIG** if the buffer wasn't big enough (*buf* will contain
  *		truncated name in this case).
  *
+ * int bpf_sysctl_get_current_value(struct bpf_sysctl *ctx, char *buf, size_t buf_len)
+ *	Description
+ *		Get current value of sysctl as it is presented in /proc/sys
+ *		(incl. newline, etc), and copy it as a string into provided
+ *		by program buffer *buf* of size *buf_len*.
+ *
+ *		The whole value is copied, no matter what file position user
+ *		space issued e.g. sys_read at.
+ *
+ *		The buffer is always NUL terminated, unless it's zero-sized.
+ *	Return
+ *		Number of character copied (not including the trailing NUL).
+ *
+ *		**-E2BIG** if the buffer wasn't big enough (*buf* will contain
+ *		truncated name in this case).
+ *
+ *		**-EINVAL** if current value was unavailable, e.g. because
+ *		sysctl is uninitialized and read returns -EIO for it.
  * u64 bpf_ktime_get_boot_ns(void)
  * 	Description
  * 		Return the time elapsed since system boot, in nanoseconds.
