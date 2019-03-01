@@ -2364,6 +2364,13 @@ union bpf_attr {
  *		A **struct bpf_tcp_sock** pointer on success, or NULL in
  *		case of failure.
  *
+ * int bpf_skb_ecn_set_ce(struct sk_buf *skb)
+ *     Description
+ *             Sets ECN of IP header to ce (congestion encountered) if
+ *             current value is ect (ECN capable). Works with IPv6 and IPv4.
+ *     Return
+ *             1 if set, 0 if not set.
+ *
  * u64 bpf_ktime_get_boot_ns(void)
  * 	Description
  * 		Return the time elapsed since system boot, in nanoseconds.
