@@ -3035,7 +3035,7 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
 			goto out;
 		}
 
-		fib6_nh->nh_flags |= RTNH_F_ONLINK;
+		fib6_nh->fib_nh_flags |= RTNH_F_ONLINK;
 	}
 
 	if (cfg->fc_encap) {
@@ -3047,10 +3047,10 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
 		if (err)
 			goto out;
 
-		fib6_nh->nh_lwtstate = lwtstate_get(lwtstate);
+		fib6_nh->fib_nh_lws = lwtstate_get(lwtstate);
 	}
 
-	fib6_nh->nh_weight = 1;
+	fib6_nh->fib_nh_weight = 1;
 
 	/* We cannot add true routes via loopback here,
 	 * they would result in kernel looping; promote them to reject routes
@@ -3079,7 +3079,7 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
 		if (err)
 			goto out;
 
-		fib6_nh->nh_gw = cfg->fc_gateway;
+		fib6_nh->fib_nh_gw6 = cfg->fc_gateway;
 	}
 
 	err = -ENODEV;
@@ -3100,18 +3100,18 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
 
 	if (!(cfg->fc_flags & (RTF_LOCAL | RTF_ANYCAST)) &&
 	    !netif_carrier_ok(dev))
-		fib6_nh->nh_flags |= RTNH_F_LINKDOWN;
+		fib6_nh->fib_nh_flags |= RTNH_F_LINKDOWN;
 
 set_dev:
-	fib6_nh->nh_dev = dev;
+	fib6_nh->fib_nh_dev = dev;
 	err = 0;
 out:
 	if (idev)
 		in6_dev_put(idev);
 
 	if (err) {
-		lwtstate_put(fib6_nh->nh_lwtstate);
-		fib6_nh->nh_lwtstate = NULL;
+		lwtstate_put(fib6_nh->fib_nh_lws);
+		fib6_nh->fib_nh_lws = NULL;
 		if (dev)
 			dev_put(dev);
 	}
@@ -3121,10 +3121,10 @@ out:
 
 void fib6_nh_release(struct fib6_nh *fib6_nh)
 {
-	lwtstate_put(fib6_nh->nh_lwtstate);
+	lwtstate_put(fib6_nh->fib_nh_lws);
 
-	if (fib6_nh->nh_dev)
-		dev_put(fib6_nh->nh_dev);
+	if (fib6_nh->fib_nh_dev)
+		dev_put(fib6_nh->fib_nh_dev);
 }
 
 static struct fib6_info *ip6_route_info_create(struct fib6_config *cfg,
@@ -3235,7 +3235,7 @@ static struct fib6_info *ip6_route_info_create(struct fib6_config *cfg,
 	 * they would result in kernel looping; promote them to reject routes
 	 */
 	addr_type = ipv6_addr_type(&cfg->fc_dst);
-	if (fib6_is_reject(cfg->fc_flags, rt->fib6_nh.nh_dev, addr_type))
+	if (fib6_is_reject(cfg->fc_flags, rt->fib6_nh.fib_nh_dev, addr_type))
 		rt->fib6_flags = RTF_REJECT | RTF_NONEXTHOP;
 
 	if (!ipv6_addr_any(&cfg->fc_prefsrc)) {
@@ -4953,7 +4953,7 @@ nla_put_failure:
 static bool fib6_info_uses_dev(const struct fib6_info *f6i,
 			       const struct net_device *dev)
 {
-	if (f6i->fib6_nh.nh_dev == dev)
+	if (f6i->fib6_nh.fib_nh_dev == dev)
 		return true;
 
 	if (f6i->fib6_nsiblings) {
@@ -4961,7 +4961,7 @@ static bool fib6_info_uses_dev(const struct fib6_info *f6i,
 
 		list_for_each_entry_safe(sibling, next_sibling,
 					 &f6i->fib6_siblings, fib6_siblings) {
-			if (sibling->fib6_nh.nh_dev == dev)
+			if (sibling->fib6_nh.fib_nh_dev == dev)
 				return true;
 		}
 	}

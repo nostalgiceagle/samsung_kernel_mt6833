@@ -4821,7 +4821,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
 		return BPF_FIB_LKUP_RET_UNSUPP_LWT;
 
 	if (res.nh->fib_nh_has_gw)
-		*dst = res.nhfib_nh_gw6;
+		*dst = res.nh->fib_nh_gw6;
 
 	dev = res.nh->fib_nh_dev;
 	params->rt_metric = res.f6i->fib6_metric;
