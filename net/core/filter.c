@@ -4691,10 +4691,10 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
 	nh = &res.fi->fib_nh[res.nh_sel];
 
 	/* do not handle lwt encaps right now */
-	if (nh->nh_lwtstate)
+	if (nh->fib_nh_lws)
 		return BPF_FIB_LKUP_RET_UNSUPP_LWT;
 
-	dev = nh->nh_dev;
+	dev = nh->fib_nh_dev;
 
 	params->rt_metric = res.fi->fib_priority;
 
