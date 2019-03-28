@@ -125,6 +125,7 @@ struct rt6_exception {
 
 struct fib6_nh {
 	struct in6_addr		nh_gw;
+	bool			fib_nh_has_gw;
 	struct net_device	*nh_dev;
 	struct lwtunnel_state	*nh_lwtstate;
 
