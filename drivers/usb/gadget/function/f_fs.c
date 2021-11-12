@@ -627,7 +627,7 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
 	ffs_data_opened(ffs);
 
 	pr_info("%s -\n", __func__);
-	return 0;
+	return stream_open(inode, file);
 }
 
 static int ffs_ep0_release(struct inode *inode, struct file *file)
@@ -1176,7 +1176,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
 	atomic_set(&epfile->error, 0);
 
 	pr_info("%s -\n", __func__);
-	return 0;
+	return stream_open(inode, file);
 }
 
 static int ffs_aio_cancel(struct kiocb *kiocb)
