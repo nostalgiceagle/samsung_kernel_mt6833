@@ -1559,6 +1559,16 @@ static void android_work(struct work_struct *data)
 			status[2] = true;
 		gi->sw_connected = gi->connected;
 	}
+        kfree(otg_desc[0]);
+        otg_desc[0] = NULL;
+        purge_configs_funcs(gi);
+        composite_dev_cleanup(cdev);
+        usb_ep_autoconfig_reset(cdev->gadget);
+        spin_lock_irqsave(&gi->spinlock, flags);
+        cdev->gadget = NULL;
+        cdev->deactivations = 0;
+        gadget->deactivated = false;
+        set_gadget_data(gadget, NULL);
 	spin_unlock_irqrestore(&cdev->lock, flags);
 
 	if (status[0]) {
