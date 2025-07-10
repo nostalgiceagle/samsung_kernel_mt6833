@@ -15,10 +15,6 @@
 # mt6853&mt6877 co-platform config
 # mt6781&mt6785 co-platform config
 
-$(info CONFIG_MTK_PLATFORM_CCCI := $(subst ",,$(CONFIG_MTK_PLATFORM)))
-$(info CONFIG_MTK_PLATFORM_CCCI := $(CONFIG_MTK_PLATFORM))
-$(info MTK_PLATFORM_CCCI := $(MTK_PLATFORM))
-
 ifeq (y, $(filter y, $(CONFIG_MACH_MT6877)))
 MTK_PLATFORM := mt6853
 subdir-ccflags-y += -DCCCI_PLATFORM_MT6877
@@ -42,11 +38,6 @@ CCCI_OBJ=n
 endif
 
 ifneq ($(CCCI_OBJ), n)
-
-$(info CONFIG_MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM)))
-$(info CONFIG_MTK_PLATFORM := $(CONFIG_MTK_PLATFORM))
-$(info MTK_PLATFORM := $(MTK_PLATFORM))
-
 
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/inc/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/$(MTK_PLATFORM)

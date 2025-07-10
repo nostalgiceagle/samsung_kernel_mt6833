@@ -4,4 +4,3 @@
 SENSOR_NAME  := s5k4hayx
 
 obj-y += $(SENSOR_NAME)mipiraw_Sensor.o
-$(info used driver: $(SENSOR_NAME))

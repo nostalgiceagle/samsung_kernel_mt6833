@@ -89,7 +89,6 @@ obj-y += mtk_ppm_ipi.o
 
 # for CPI
 ifeq ($(USE_PPM_CPI), "true")
-$(warning USE_PPM_CPI)
 obj-y += mtk_ppm_cpi.o
 endif
 

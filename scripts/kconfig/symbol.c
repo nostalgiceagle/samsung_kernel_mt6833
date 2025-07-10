@@ -301,20 +301,7 @@ static void sym_warn_unmet_dep(struct symbol *sym)
 {
 	struct gstr gs = str_new();
 
-	str_printf(&gs,
-		   "\nWARNING: unmet direct dependencies detected for %s\n",
-		   sym->name);
-	str_printf(&gs,
-		   "  Depends on [%c]: ",
-		   sym->dir_dep.tri == mod ? 'm' : 'n');
 	expr_gstr_print(sym->dir_dep.expr, &gs);
-	str_printf(&gs, "\n");
-
-	expr_gstr_print_revdep(sym->rev_dep.expr, &gs, yes,
-			       "  Selected by [y]:\n");
-	expr_gstr_print_revdep(sym->rev_dep.expr, &gs, mod,
-			       "  Selected by [m]:\n");
-
 	fputs(str_get(&gs), stderr);
 }
 

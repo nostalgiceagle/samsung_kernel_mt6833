@@ -4,4 +4,3 @@
 SENSOR_NAME  := imx582
 
 obj-y += $(SENSOR_NAME)mipiraw_Sensor.o
-$(info used driver: $(SENSOR_NAME))

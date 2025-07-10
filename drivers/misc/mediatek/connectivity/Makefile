@@ -20,7 +20,6 @@
 #
 TOP := $(srctree)/drivers/misc/mediatek/connectivity
 ifeq ($(TARGET_BUILD_VARIANT),)
-$(warning TARGET_BUILD_VARIANT is empty! Using default option.)
 TARGET_BUILD_VARIANT := user
 endif
 WMT_SRC_FOLDER := $(TOP)/common
@@ -60,9 +59,7 @@ endif
 ifeq ($(CONFIG_MTK_COMBO), y)
 ccflags-y += -D CFG_CONNADP_BUILD_IN
 endif
-$(info $$CONFIG_MTK_COMBO_CHIP is [${CONFIG_MTK_COMBO_CHIP}])
 MTK_PLATFORM_ID := $(patsubst CONSYS_%,%,$(subst ",,$(CONFIG_MTK_COMBO_CHIP)))
-$(info MTK_PLATFORM_ID is [${MTK_PLATFORM_ID}])
 
 ifneq (,$(filter $(CONFIG_MTK_COMBO_CHIP), "CONSYS_6885" "CONSYS_6893"))
 export MTK_COMBO_CHIP=CONNAC2X2_SOC3_0
@@ -85,13 +82,10 @@ WLAN_IP_SET_2_SERIES := 3967 6785
 WLAN_IP_SET_3_SERIES := 6779 6873 6853
 
 ifneq ($(filter $(WLAN_IP_SET_3_SERIES), $(WLAN_CHIP_ID)),)
-$(info WIFI_IP_SET is 3)
 export WIFI_IP_SET=3
 else ifneq ($(filter $(WLAN_IP_SET_2_SERIES), $(WLAN_CHIP_ID)),)
-$(info WIFI_IP_SET is 2)
 export WIFI_IP_SET=2
 else
-$(info WIFI_IP_SET is 1)
 export WIFI_IP_SET=1
 endif
 
@@ -103,7 +97,6 @@ obj-y += gps/
 # For FM built-in mode
 # for fmradio options
 FM_CHIP_ID := $(patsubst CONSYS_%,%,$(subst ",,$(CONFIG_MTK_COMBO_CHIP)))
-$(info FM_CHIP_ID is [${FM_CHIP_ID}])
 
 ifneq (,$(filter $(CONFIG_MTK_COMBO_CHIP), "CONSYS_6885"))
 export CFG_BUILD_CONNAC2=true
@@ -147,9 +140,6 @@ endif
 
 export CFG_FM_CHIP_ID=$(FM_CHIP_ID)
 export CFG_FM_CHIP=$(FM_CHIP)
-$(info CFG_FM_CHIP_ID is [${CFG_FM_CHIP_ID}])
-$(info CFG_FM_CHIP is [${CFG_FM_CHIP}])
-$(info CFG_BUILD_CONNAC2 is [${CFG_BUILD_CONNAC2}])
 
 obj-y += fmradio/
 obj-y += bt/mt66xx/wmt/

@@ -42,7 +42,6 @@ else
 CAMERA_OIS_PROJECT_FOLDER := camera_project/default
 endif
 
-$(info CAMERA_OIS_PROJECT_FOLDER = $(CAMERA_OIS_PROJECT_FOLDER))
 subdir-ccflags-$(CONFIG_CAMERA_OIS) += -I$(MTK_CUSTOM_PATH)/lens/cam_ois/src/$(CAMERA_OIS_PROJECT_FOLDER)
 subdir-ccflags-$(CONFIG_CAMERA_OIS) += -I$(MTK_CUSTOM_PATH)/lens/cam_ois/inc
 subdir-ccflags-$(CONFIG_CAMERA_OIS) += -I$(MTK_CUSTOM_PATH)/lens/cam_ois/src

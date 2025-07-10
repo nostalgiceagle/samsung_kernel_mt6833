@@ -3,10 +3,6 @@ ifeq ($(CONFIG_MTK_PLATFORM),)
 endif
 MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 
-ifeq ($(TARGET_PRODUCT),)
-$(warning TARGET_PRODUCT is empty! using default option.)
-endif
-
 # disable logs!
 ccflags-y += -DDBG_DISABLE_ALL_LOG=1
 
@@ -33,7 +29,6 @@ endif
 ifndef TOP
     TOP := $(srctree)/..
 endif
-$(info os option: $(os))
 # ---------------------------------------------------
 # ALPS Setting
 # ---------------------------------------------------
@@ -57,9 +52,6 @@ ifeq ($(MTK_COMBO_CHIP),)
 MTK_COMBO_CHIP = MT6632
 endif
 
-$(info $$MTK_PLATFORM is [${MTK_PLATFORM}])
-$(info $$WLAN_CHIP_ID is [${WLAN_CHIP_ID}])
-$(info $$MTK_COMBO_CHIP is [${MTK_COMBO_CHIP}])
 
 ifneq ($(CONFIG_MTK_EMI),)
 ccflags-y += -DCONFIG_WLAN_MTK_EMI=1
@@ -482,7 +474,6 @@ Y = $(word 2 ,$(VERSION_STR))
 Z = $(word 3 ,$(VERSION_STR))
 VERSION := $(shell echo "$$(( $X * 65536 + $Y * 256 + $Z))" )
 ccflags-y += -DCFG_CFG80211_VERSION=$(VERSION)
-$(info DCFG_CFG80211_VERSION=$(VERSION))
 endif
 
 ccflags-y += -DCFG_SUPPORT_PASSPOINT=1
@@ -969,7 +960,6 @@ endif
 
 MTK_WLAN_SERVICE=yes
 SERVICE_DIR  := wlan_service/
-$(info SERVICE_DIR is [{$(SERVICE_DIR)}])
 
 ifeq ($(MTK_WLAN_SERVICE), yes)
 ccflags-y += -DCONFIG_WLAN_SERVICE=1
@@ -985,7 +975,6 @@ SERVICE_OBJS := $(SERVICE_DIR)agent/agent.o \
                 $(SERVICE_DIR)glue/osal/gen4m/net_adaption_gen4m.o \
                 $(SERVICE_DIR)glue/hal/gen4m/operation_gen4m.o
 $(MODULE_NAME)-objs  += $(SERVICE_OBJS)
-$(info $$MTK_WLAN_SERVICE is [{$(SERVICE_OBJS)}])
 else
 ccflags-y += -DCONFIG_WLAN_SERVICE=0
 ccflags-y += -DCONFIG_TEST_ENGINE_OFFLOAD=0

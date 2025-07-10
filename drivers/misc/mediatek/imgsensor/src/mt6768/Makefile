@@ -51,10 +51,6 @@ endef
 
 
 $(foreach drv,$(subst $\",,$(CONFIG_CUSTOM_KERNEL_IMGSENSOR)),$(eval $(call FILTER_DRV,$(drv))))
-
-ifneq ($(common_drv),)
-$(info imgsensor drv by common $(common_drv))
-endif
 obj-y				+= $(common_drv)
 
 

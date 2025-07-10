@@ -4,4 +4,3 @@
 SENSOR_NAME  := sr846d
 
 obj-y += $(SENSOR_NAME)mipiraw_Sensor.o
-$(info used driver: $(SENSOR_NAME))
