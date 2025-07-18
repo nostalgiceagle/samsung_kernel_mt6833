@@ -138,7 +138,9 @@ int fuse_do_open(struct fuse_conn *fc, u64 nodeid, struct file *file,
 		if (!err) {
 			ff->fh = outarg.fh;
 			ff->open_flags = outarg.open_flags;
+#ifdef CONFIG_FUSE_PASSTHROUGH
 			fuse_passthrough_setup(fc, ff, &outarg);
+#endif
 		} else if (err != -ENOSYS || isdir) {
 			fuse_file_free(ff);
 			return err;
@@ -260,7 +262,9 @@ void fuse_release_common(struct file *file, bool isdir)
 	struct fuse_req *req = ff->reserved_req;
 	int opcode = isdir ? FUSE_RELEASEDIR : FUSE_RELEASE;
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	fuse_passthrough_release(&ff->passthrough);
+#endif
 
 	fuse_prepare_release(ff, file->f_flags, opcode);
 
@@ -952,10 +956,11 @@ static ssize_t fuse_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
 		if (err)
 			return err;
 	}
-
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	if (ff->passthrough.filp)
 		return fuse_passthrough_read_iter(iocb, to);
 	else
+#endif
 		return generic_file_read_iter(iocb, to);
 }
 
@@ -1206,8 +1211,10 @@ static ssize_t fuse_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
 	ssize_t err;
 	loff_t endbyte = 0;
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	if (ff->passthrough.filp)
 		return fuse_passthrough_write_iter(iocb, from);
+#endif
 
 	if (get_fuse_conn(inode)->writeback_cache) {
 		/* Update size (EOF optimization) and mode (SUID clearing) */
@@ -1449,9 +1456,10 @@ static ssize_t __fuse_direct_read(struct fuse_io_priv *io,
 	if (is_bad_inode(inode))
 		return -EIO;
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	if (ff->passthrough.filp)
 		return fuse_passthrough_read_iter(io->iocb, iter);
-
+#endif
 	res = fuse_direct_io(io, iter, ppos, 0);
 
 	fuse_invalidate_attr(inode);
@@ -1475,8 +1483,10 @@ static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
 	if (is_bad_inode(inode))
 		return -EIO;
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	if (ff->passthrough.filp)
 		return fuse_passthrough_write_iter(iocb, from);
+#endif
 
 	/* Don't allow parallel writes to the same file */
 	inode_lock(inode);
@@ -2121,9 +2131,11 @@ static const struct vm_operations_struct fuse_file_vm_ops = {
 static int fuse_file_mmap(struct file *file, struct vm_area_struct *vma)
 {
 	struct fuse_file *ff = file->private_data;
-
+	
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	if (ff->passthrough.filp)
 		return fuse_passthrough_mmap(file, vma);
+#endif
 
 	if ((vma->vm_flags & VM_SHARED) && (vma->vm_flags & VM_MAYWRITE))
 		fuse_link_write_file(file);
@@ -2137,8 +2149,10 @@ static int fuse_direct_mmap(struct file *file, struct vm_area_struct *vma)
 {
 	struct fuse_file *ff = file->private_data;
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	if (ff->passthrough.filp)
 		return fuse_passthrough_mmap(file, vma);
+#endif
 
 	/* Can't provide the coherency needed for MAP_SHARED */
 	if (vma->vm_flags & VM_MAYSHARE)

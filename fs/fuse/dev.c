@@ -2270,7 +2270,9 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
 	int res;
 	int oldfd;
 	struct fuse_dev *fud = NULL;
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	struct fuse_passthrough_out pto;
+#endif
 
 	if (_IOC_TYPE(cmd) != FUSE_DEV_IOC_MAGIC)
 		return -EINVAL;
@@ -2301,6 +2303,7 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
 			}
 		}
 		break;
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	case _IOC_NR(FUSE_DEV_IOC_PASSTHROUGH_OPEN):
 		res = -EFAULT;
 		if (!copy_from_user(&pto,
@@ -2312,6 +2315,7 @@ static long fuse_dev_ioctl(struct file *file, unsigned int cmd,
 				res = fuse_passthrough_open(fud, &pto);
 		}
 		break;
+#endif
 	default:
 		res = -ENOTTY;
 		break;

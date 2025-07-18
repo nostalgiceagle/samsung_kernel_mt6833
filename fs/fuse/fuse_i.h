@@ -129,6 +129,7 @@ enum {
 
 struct fuse_conn;
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 /**
  * Reference to lower filesystem file for read/write operations handled in
  * passthrough mode.
@@ -139,6 +140,7 @@ struct fuse_passthrough {
 	struct file *filp;
 	struct cred *cred;
 };
+#endif
 
 /** FUSE specific file data */
 struct fuse_file {
@@ -165,9 +167,11 @@ struct fuse_file {
 
 	/** Entry on inode's write_files list */
 	struct list_head write_entry;
-
+	
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	/** Container for data related to the passthrough functionality */
 	struct fuse_passthrough passthrough;
+#endif
 
 	/** RB node to be linked on fuse_conn->polled_files */
 	struct rb_node polled_node;
@@ -666,9 +670,11 @@ struct fuse_conn {
 
 	/** Allow other than the mounter user to access the filesystem ? */
 	unsigned allow_other:1;
-
+	
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	/** Passthrough mode for read/write IO */
 	unsigned int passthrough:1;
+#endif
 
 	/** The number of requests waiting for completion */
 	atomic_t num_waiting;
@@ -708,12 +714,14 @@ struct fuse_conn {
 
 	/** List of device instances belonging to this connection */
 	struct list_head devices;
-
+	
+#ifdef CONFIG_FUSE_PASSTHROUGH
 	/** IDR for passthrough requests */
 	struct idr passthrough_req;
 
 	/** Proctects passthrough_req */
 	spinlock_t passthrough_req_lock;
+#endif
 };
 
 static inline struct fuse_conn *get_fuse_conn_super(struct super_block *sb)
@@ -1077,6 +1085,7 @@ static inline void fuse_freezer_count(void) {}
 	__ret;									\
 })
 
+#ifdef CONFIG_FUSE_PASSTHROUGH
 /* passthrough.c */
 int fuse_passthrough_open(struct fuse_dev *fud,
 			  struct fuse_passthrough_out *pto);
@@ -1086,5 +1095,6 @@ void fuse_passthrough_release(struct fuse_passthrough *passthrough);
 ssize_t fuse_passthrough_read_iter(struct kiocb *iocb, struct iov_iter *to);
 ssize_t fuse_passthrough_write_iter(struct kiocb *iocb, struct iov_iter *from);
 ssize_t fuse_passthrough_mmap(struct file *file, struct vm_area_struct *vma);
+#endif
 
 #endif /* _FS_FUSE_I_H */

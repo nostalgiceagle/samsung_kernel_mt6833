@@ -27,6 +27,10 @@ config CUSE
 	  If you want to develop or use a userspace character device
 	  based on CUSE, answer Y or M.
 
+config FUSE_PASSTHROUGH
+	bool "Fuse passthrough support"
+	default n
+	
 config FUSE_SUPPORT_STLOG
 	bool "Enable storage log"
 	default y
