@@ -936,11 +936,12 @@ static void process_init_reply(struct fuse_conn *fc, struct fuse_req *req)
 #ifdef CONFIG_FUSE_PASSTHROUGH
 			if (arg->flags & FUSE_PASSTHROUGH) {
 				fc->passthrough = 1;
-#endif
+
 				/* Prevent further stacking */
 				fc->sb->s_stack_depth =
 					FILESYSTEM_MAX_STACK_DEPTH;
 			}
+#endif
 		} else {
 			ra_pages = fc->max_read / PAGE_SIZE;
 			fc->no_lock = 1;

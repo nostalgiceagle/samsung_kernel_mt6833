@@ -261,7 +261,7 @@ int cfg80211_validate_key_settings(struct cfg80211_registered_device *rdev,
 				    NL80211_EXT_FEATURE_BEACON_PROTECTION))
 		max_key_idx = 7;
 	if (key_idx < 0 || key_idx > max_key_idx)
-		return -ENIVAL;
+		return -EINVAL;
 
 	if (!cfg80211_valid_key_idx(rdev, key_idx, pairwise))
 		return -EINVAL;
