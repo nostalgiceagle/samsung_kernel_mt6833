@@ -15,12 +15,14 @@
 - ./build_kernel.sh (with sudo)
 
 
-### Features [To be added/Implemented]
-- Bootable with OneUI7
-- TEO CPUIDLE Governor
-- Dex TouchPad [SEC_TOUCHPAD] 
-- Less-Debugs
-- KernelSU-Next with SUSFS
+### Features [To be added/Implemented] 
+    [✅️ = Done | ❌️ = Not done yet]
+- Bootable with OneUI7 ✅️
+- Upstreamed to 4.19.222 (as of now)✅️
+- TEO CPUIDLE Governor ❌️
+- Dex TouchPad [SEC_TOUCHPAD] ❌️
+- Less-Debugs ❌️
+- KernelSU-Next with SUSFS ❌️
 - Maybe more in future
 
 ### About this Repository:
