@@ -545,6 +545,7 @@ static int nilfs_iget_test(struct inode *inode, void *opaque)
 	} else if (args->for_btnc) {
 		return 0;
 	}
+
 	if (test_bit(NILFS_I_SHADOW, &ii->i_state)) {
 		if (!args->for_shadow)
 			return 0;

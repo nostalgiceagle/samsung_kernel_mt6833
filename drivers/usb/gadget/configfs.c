@@ -1536,9 +1536,11 @@ static void android_work(struct work_struct *data)
 {
 	struct gadget_info *gi = container_of(data, struct gadget_info, work);
 	struct usb_composite_dev *cdev = &gi->cdev;
+	struct usb_gadget *gadget;
 	char *disconnected[2] = { "USB_STATE=DISCONNECTED", NULL };
 	char *connected[2]    = { "USB_STATE=CONNECTED", NULL };
 	char *configured[2]   = { "USB_STATE=CONFIGURED", NULL };
+	bool deactivated;
 	/* 0-connected 1-configured 2-disconnected*/
 	bool status[3] = { false, false, false };
 	unsigned long flags;
