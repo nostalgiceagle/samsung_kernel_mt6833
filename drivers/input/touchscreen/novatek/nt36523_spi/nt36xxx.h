@@ -279,6 +279,7 @@ struct nvt_ts_data {
 	struct nvt_ts_platdata *platdata;
 	struct nvt_ts_coord coords[TOUCH_MAX_FINGER_NUM];
 	u8 touch_count;
+	struct input_dev *input_dev_pad;
 	struct input_dev *input_dev;
 	struct input_dev *input_dev_proximity;
 	uint16_t addr;

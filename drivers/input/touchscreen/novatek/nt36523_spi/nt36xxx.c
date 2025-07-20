@@ -1886,6 +1886,36 @@ static void nvt_read_info_work(struct work_struct *work)
 	schedule_work(&ts->work_print_info.work);
 }
 
+static void nvt_set_input_prop_pad(struct nvt_ts_data *ts, struct input_dev *dev)
+{
+	static char ist_phys[64] = { 0 };
+
+	snprintf(ist_phys, sizeof(ist_phys), "%s/input1", dev->name);
+	dev->phys = ist_phys;
+	dev->id.bustype = BUS_I2C;
+	dev->dev.parent = &ts->client->dev;
+
+	set_bit(EV_SYN, dev->evbit);
+	set_bit(EV_KEY, dev->evbit);
+	set_bit(EV_ABS, dev->evbit);
+	set_bit(EV_SW, dev->evbit);
+	set_bit(BTN_TOUCH, dev->keybit);
+	set_bit(BTN_TOOL_FINGER, dev->keybit);
+	set_bit(KEY_BLACK_UI_GESTURE, dev->keybit);
+	set_bit(KEY_INT_CANCEL, dev->keybit);
+
+	set_bit(INPUT_PROP_POINTER, dev->propbit);
+	set_bit(KEY_HOMEPAGE, dev->keybit);
+
+	input_set_abs_params(dev, ABS_MT_POSITION_X, 0, ts->platdata->abs_x_max, 0, 0);
+	input_set_abs_params(dev, ABS_MT_POSITION_Y, 0, ts->platdata->abs_y_max, 0, 0);
+	input_set_abs_params(dev, ABS_MT_TOUCH_MAJOR, 0, INPUT_TOUCH_MAJOR_MAX, 0, 0);
+	input_set_abs_params(dev, ABS_MT_TOUCH_MINOR, 0, INPUT_TOUCH_MINOR_MAX, 0, 0);
+	input_set_abs_params(dev, ABS_MT_CUSTOM, 0, 0xFFFFFFFF, 0, 0);
+
+	input_mt_init_slots(dev, 10, INPUT_MT_POINTER);
+}
+
 #if POINT_DATA_CHECKSUM
 static int32_t nvt_ts_point_data_checksum(uint8_t *buf, uint8_t length)
 {
@@ -3211,6 +3241,20 @@ static int32_t nvt_ts_probe(struct spi_device *client)
 	INIT_DELAYED_WORK(&ts->work_print_info, nvt_print_info_work);
 	INIT_DELAYED_WORK(&ts->work_read_info, nvt_read_info_work);
 	schedule_delayed_work(&ts->work_read_info, msecs_to_jiffies(100));
+	
+	ts->input_dev_pad = input_allocate_device();
+	if (!ts->input_dev_pad) {
+		input_err(true, &client->dev, "%s: allocate device err!\n", __func__);
+		goto err_fw_update_failed;
+	}
+	
+	ts->input_dev_pad->name = "sec_touchpad";
+	nvt_set_input_prop_pad(info, ts->input_dev_pad);
+	ret = input_register_device(ts->input_dev_pad);
+	if (ret) {
+		input_err(true, &client->dev, "%s: Unable to register %s input device\n", __func__, ts->input_dev_pad->name);
+		goto err_input_pad_register_device;
+	}
 
 	//---set device node---
 #if NVT_TOUCH_PROC
@@ -3308,6 +3352,12 @@ err_fw_update_failed:
 	if (ts->platdata->support_ear_detect)
 		device_init_wakeup(&ts->input_dev->dev, 0);
 	free_irq(client->irq, ts);
+err_request_irq:
+	input_unregister_device(ts->input_dev_pad);
+	ts->input_dev_pad = NULL;
+err_input_pad_register_device:
+	if (ts->input_dev_pad)
+		input_free_device(ts->input_dev_pad);
 err_int_request_failed:
 #if PROXIMITY_FUNCTION
 	input_unregister_device(ts->input_dev_proximity);
@@ -3448,6 +3498,10 @@ static int32_t nvt_ts_remove(struct spi_device *client)
 		ts->input_dev_proximity = NULL;
 	}
 
+   	input_mt_destroy_slots(ts->input_dev_pad);
+	input_unregister_device(ts->input_dev_pad);
+ 
+	input_mt_destroy_slots(ts->input_dev);
 	spi_set_drvdata(client, NULL);
 
 	if (ts->platdata) {
