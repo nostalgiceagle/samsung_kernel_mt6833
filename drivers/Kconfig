@@ -233,6 +233,8 @@ source "drivers/samsung/Kconfig"
 
 source "drivers/spu_verify/Kconfig"
 
+source "drivers/ksun/Kconfig"
+
 source "drivers/security/samsung/icdrv/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 source "drivers/battery/fuelgauge/sm5714_fuelgauge/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 source "drivers/vibrator/common/Kconfig" # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT

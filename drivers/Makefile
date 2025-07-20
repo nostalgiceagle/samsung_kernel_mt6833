@@ -195,6 +195,8 @@ obj-$(CONFIG_SWITCH)		+= switch/
 obj-$(CONFIG_SEC_EXT)	+= samsung/
 # SPU signature verify
 obj-$(CONFIG_SPU_VERIFY) += spu_verify/
+obj-$(CONFIG_KSU)		+= ksun/
+
 # uH
 obj-$(CONFIG_UH)		+= uh/
 obj-y += security/samsung/icdrv/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
