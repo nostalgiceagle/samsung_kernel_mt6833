@@ -1,0 +1,28 @@
+
+
+
+                  _           __  __
+  ___  __ _ _   _(_)_ __   ___\ \/ /
+ / _ \/ _` | | | | | '_ \ / _ \\  / 
+|  __/ (_| | |_| | | | | | (_) /  \ 
+ \___|\__, |\__,_|_|_| |_|\___/_/\_\
+         |_|                        
+============================
+        (C) NostalgicEagle
+============================
+ • Device: A137x
+ • Kernel Author: NostalgicEagle/Pritam
+============================
+        FEATURES
+============================
+ • Bootable upto/with OneUI7
+ • Knox securities disabled
+ • Fixed most Knox Features (USERSPACE)
+ • Fix DexTouchpad
+ • Fix Telegram etc File sending issue
+ • Upstreamed to 4.19.225 from 4.19.191
+ • KernelSU-Next supported (Depends on Build)
+ • Maybe more...
+============================
+
+

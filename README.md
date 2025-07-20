@@ -12,15 +12,15 @@
 ## To compile:
 - git clone --depth=1 https://github.com/nostalgiceagle/samsung_kernel_mt6833
 - cd samsung_kernel_mt6833
-- ./build_kernel.sh (with sudo)
+- ./build.sh (with sudo)
 
 
-### Features [To be added/Implemented]
-- Bootable with OneUI7
-- TEO CPUIDLE Governor
-- Dex TouchPad [SEC_TOUCHPAD] 
-- Less-Debugs
-- KernelSU-Next with SUSFS
+### Features [To be added/Implemented] 
+- ✅️ Bootable with OneUI7 
+- ✔️ TEO CPUIDLE Governor
+- ✅️ Dex TouchPad [SEC_TOUCHPAD] 
+- ✔ Less-Debugs
+- ✅️ KernelSU-Next 
 - Maybe more in future
 
 ### About this Repository:
