@@ -1,0 +1,10 @@
+*.patch
+patches/*
+out/*
+*pqtch*
+*patcg*
+*.orig
+*.rej
+*.bak
+*.o
+
