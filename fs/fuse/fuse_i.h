@@ -680,6 +680,9 @@ struct fuse_conn {
 	unsigned int passthrough:1;
 #endif
 
+	/** Does the filesystem support copy_file_range? */
+	unsigned no_copy_file_range:1;
+
 	/** The number of requests waiting for completion */
 	atomic_t num_waiting;
 

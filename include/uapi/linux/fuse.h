@@ -116,6 +116,9 @@
  *
  *  7.27
  *  - add FUSE_ABORT_ERROR
+ *
+ *  7.28
+ *  - add FUSE_COPY_FILE_RANGE
  */
 
 #ifndef _LINUX_FUSE_H
@@ -151,7 +154,7 @@
 #define FUSE_KERNEL_VERSION 7
 
 /** Minor version number of this interface */
-#define FUSE_KERNEL_MINOR_VERSION 27
+#define FUSE_KERNEL_MINOR_VERSION 28
 
 /** The node ID of the root inode */
 #define FUSE_ROOT_ID 1
@@ -384,6 +387,7 @@ enum fuse_opcode {
 	FUSE_READDIRPLUS   = 44,
 	FUSE_RENAME2       = 45,
 	FUSE_LSEEK         = 46,
+	FUSE_COPY_FILE_RANGE    = 47,
 	FUSE_CANONICAL_PATH= 2016,
 
 	/* CUSE specific operations */
@@ -805,6 +809,16 @@ struct fuse_lseek_in {
 
 struct fuse_lseek_out {
 	uint64_t	offset;
+};
+
+struct fuse_copy_file_range_in {
+	uint64_t	fh_in;
+	uint64_t	off_in;
+	uint64_t	nodeid_out;
+	uint64_t	fh_out;
+	uint64_t	off_out;
+	uint64_t	len;
+	uint64_t	flags;
 };
 
 #endif /* _LINUX_FUSE_H */
