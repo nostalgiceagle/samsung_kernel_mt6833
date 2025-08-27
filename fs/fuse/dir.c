@@ -16,22 +16,6 @@
 #include <linux/xattr.h>
 #include <linux/posix_acl.h>
 
-static bool fuse_use_readdirplus(struct inode *dir, struct dir_context *ctx)
-{
-	struct fuse_conn *fc = get_fuse_conn(dir);
-	struct fuse_inode *fi = get_fuse_inode(dir);
-
-	if (!fc->do_readdirplus)
-		return false;
-	if (!fc->readdirplus_auto)
-		return true;
-	if (test_and_clear_bit(FUSE_I_ADVISE_RDPLUS, &fi->state))
-		return true;
-	if (ctx->pos == 0)
-		return true;
-	return false;
-}
-
 static void fuse_advise_use_readdirplus(struct inode *dir)
 {
 	struct fuse_inode *fi = get_fuse_inode(dir);
@@ -80,8 +64,7 @@ static u64 time_to_jiffies(u64 sec, u32 nsec)
  * Set dentry and possibly attribute timeouts from the lookup/mk*
  * replies
  */
-static void fuse_change_entry_timeout(struct dentry *entry,
-				      struct fuse_entry_out *o)
+void fuse_change_entry_timeout(struct dentry *entry, struct fuse_entry_out *o)
 {
 	fuse_dentry_settime(entry,
 		time_to_jiffies(o->entry_valid, o->entry_valid_nsec));
@@ -92,7 +75,7 @@ static u64 attr_timeout(struct fuse_attr_out *o)
 	return time_to_jiffies(o->attr_valid, o->attr_valid_nsec);
 }
 
-static u64 entry_attr_timeout(struct fuse_entry_out *o)
+u64 entry_attr_timeout(struct fuse_entry_out *o)
 {
 	return time_to_jiffies(o->attr_valid, o->attr_valid_nsec);
 }
@@ -261,11 +244,6 @@ out:
 invalid:
 	ret = 0;
 	goto out;
-}
-
-static int invalid_nodeid(u64 nodeid)
-{
-	return !nodeid || nodeid == FUSE_ROOT_ID;
 }
 
 static int fuse_dentry_init(struct dentry *dentry)

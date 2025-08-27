@@ -759,6 +759,11 @@ static inline bool fuse_is_bad(struct inode *inode)
 	return unlikely(test_bit(FUSE_I_BAD, &get_fuse_inode(inode)->state));
 }
 
+static inline int invalid_nodeid(u64 nodeid)
+{
+	return !nodeid || nodeid == FUSE_ROOT_ID;
+}
+
 /** Device operations */
 extern const struct file_operations fuse_dev_operations;
 
@@ -934,6 +939,9 @@ void fuse_invalidate_attr(struct inode *inode);
 void fuse_invalidate_entry_cache(struct dentry *entry);
 
 void fuse_invalidate_atime(struct inode *inode);
+
+u64 entry_attr_timeout(struct fuse_entry_out *o);
+void fuse_change_entry_timeout(struct dentry *entry, struct fuse_entry_out *o);
 
 /**
  * Acquire reference to fuse_conn
@@ -1111,5 +1119,9 @@ ssize_t fuse_passthrough_read_iter(struct kiocb *iocb, struct iov_iter *to);
 ssize_t fuse_passthrough_write_iter(struct kiocb *iocb, struct iov_iter *from);
 ssize_t fuse_passthrough_mmap(struct file *file, struct vm_area_struct *vma);
 #endif
+
+
+/* readdir.c */
+int fuse_readdir(struct file *file, struct dir_context *ctx);
 
 #endif /* _FS_FUSE_I_H */
