@@ -5489,13 +5489,9 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
 	if (!stacksafe(env, old, cur, env->idmap_scratch))
 		return false;
 
-    if (!refsafe(old, cur))
-		goto out_free;
 
 	return true;
 
-out_free:
- 	kfree(idmap);
 }
 
 static bool states_equal(struct bpf_verifier_env *env,

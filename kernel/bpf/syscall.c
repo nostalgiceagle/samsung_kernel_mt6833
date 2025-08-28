@@ -2245,7 +2245,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
 			if (urec_size != info.func_info_rec_size)
 				return -EINVAL;
 
-			if (bpf_dump_raw_ok()) {
+			if (bpf_dump_raw_ok(current_cred())) {
 				struct bpf_func_info kern_finfo;
 				char __user *user_finfo;
 				u32 i, insn_offset;

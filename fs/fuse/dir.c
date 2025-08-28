@@ -1396,8 +1396,8 @@ static int parse_dirplusfile(char *buf, size_t nbytes, struct file *file,
 
 	return 0;
 }
-
-static int fuse_readdir(struct file *file, struct dir_context *ctx)
+/*
+int fuse_readdir(struct file *file, struct dir_context *ctx)
 {
 	int plus, err;
 	size_t nbytes;
@@ -1455,7 +1455,7 @@ static int fuse_readdir(struct file *file, struct dir_context *ctx)
 	fuse_invalidate_atime(inode);
 	return err;
 }
-
+*/
 static const char *fuse_get_link(struct dentry *dentry,
 				 struct inode *inode,
 				 struct delayed_call *done)
