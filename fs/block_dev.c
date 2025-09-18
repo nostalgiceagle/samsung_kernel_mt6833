@@ -224,6 +224,8 @@ __blkdev_direct_IO_simple(struct kiocb *iocb, struct iov_iter *iter,
 		if (!vecs)
 			return -ENOMEM;
 	}
+	if (iocb->ki_flags & IOCB_HIPRI)
+		bio.bi_opf |= REQ_HIPRI;
 
 	bio_init(&bio, vecs, nr_pages);
 	bio_set_dev(&bio, bdev);
