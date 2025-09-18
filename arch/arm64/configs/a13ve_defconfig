@@ -5748,6 +5748,13 @@ CONFIG_MAGIC_SYSRQ_SERIAL=y
 # CONFIG_DEBUG_KERNEL is not set
 
 #
+# Multi-Gen LRU
+#
+CONFIG_LRU_GEN=y
+CONFIG_LRU_GEN_ENABLED=y
+# CONFIG_LRU_GEN_STATS is not set
+
+#
 # Memory Debugging
 #
 # CONFIG_PAGE_EXTENSION is not set
