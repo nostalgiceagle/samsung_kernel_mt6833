@@ -861,8 +861,12 @@ static int __bio_iov_bvec_add_pages(struct bio *bio, struct iov_iter *iter)
 		 * get rid of the get here and the need to call
 		 * bio_release_pages() at IO completion time.
 		 */
-		mp_bvec_for_each_page(page, bv, i)
+#if 0
+		mp_bvec_for_each_page(page, bv, i);
 			get_page(page);
+#else
+		get_page(bv->bv_page);
+#endif
 		iov_iter_advance(iter, size);
 		return 0;
 	}
@@ -938,7 +942,8 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
  */
 int bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
 {
-	const bool is_bvec = iov_iter_is_bvec(iter);
+//	const bool is_bvec = iov_iter_is_bvec(iter);
+	const bool is_bvec = (iter->type & ITER_BVEC);
 	unsigned short orig_vcnt = bio->bi_vcnt;
 
 	do {
