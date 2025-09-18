@@ -768,7 +768,11 @@ static int io_prep_rw(struct io_kiocb *req, const struct sqe_submit *s,
 
 		kiocb->ki_ioprio = ioprio;
 	} else
+#if 0
 		kiocb->ki_ioprio = get_current_ioprio();
+#else
+		kiocb->ki_ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, IOPRIO_NORM);
+#endif
 
 	ret = kiocb_set_rw_flags(kiocb, READ_ONCE(sqe->rw_flags));
 	if (unlikely(ret))
@@ -1975,9 +1979,11 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
 		return 0;
 
 	if (sig) {
+#if 0
 		ret = set_user_sigmask(sig, &ksigmask, &sigsaved, sigsz);
 		if (ret)
 			return ret;
+#endif
 	}
 
 	do {
@@ -1997,10 +2003,10 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
 	} while (1);
 
 	finish_wait(&ctx->wait, &wait);
-
+#if 0
 	if (sig)
 		restore_user_sigmask(sig, &sigsaved);
-
+#endif
 	return READ_ONCE(ring->r.head) == READ_ONCE(ring->r.tail) ? ret : 0;
 }
 
@@ -2452,6 +2458,7 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, void __user *arg,
 
 		ret = 0;
 		down_read(&current->mm->mmap_sem);
+#if 0
 		pret = get_user_pages_longterm(ubuf, nr_pages, FOLL_WRITE,
 						pages, vmas);
 		if (pret == nr_pages) {
@@ -2468,6 +2475,7 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, void __user *arg,
 		} else {
 			ret = pret < 0 ? pret : -EFAULT;
 		}
+#endif
 		up_read(&current->mm->mmap_sem);
 		if (ret) {
 			/*
