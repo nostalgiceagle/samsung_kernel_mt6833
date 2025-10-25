@@ -1909,8 +1909,8 @@ static void nvt_set_input_prop_pad(struct nvt_ts_data *ts, struct input_dev *dev
 
 	input_set_abs_params(dev, ABS_MT_POSITION_X, 0, ts->platdata->abs_x_max, 0, 0);
 	input_set_abs_params(dev, ABS_MT_POSITION_Y, 0, ts->platdata->abs_y_max, 0, 0);
-	input_set_abs_params(dev, ABS_MT_TOUCH_MAJOR, 0, INPUT_TOUCH_MAJOR_MAX, 0, 0);
-	input_set_abs_params(dev, ABS_MT_TOUCH_MINOR, 0, INPUT_TOUCH_MINOR_MAX, 0, 0);
+	input_set_abs_params(dev, ABS_MT_TOUCH_MAJOR, 0, 255, 0, 0);
+	input_set_abs_params(dev, ABS_MT_TOUCH_MINOR, 0, 255, 0, 0);
 	input_set_abs_params(dev, ABS_MT_CUSTOM, 0, 0xFFFFFFFF, 0, 0);
 
 	input_mt_init_slots(dev, 10, INPUT_MT_POINTER);
@@ -3249,7 +3249,7 @@ static int32_t nvt_ts_probe(struct spi_device *client)
 	}
 	
 	ts->input_dev_pad->name = "sec_touchpad";
-	nvt_set_input_prop_pad(info, ts->input_dev_pad);
+	nvt_set_input_prop_pad(ts, ts->input_dev_pad);
 	ret = input_register_device(ts->input_dev_pad);
 	if (ret) {
 		input_err(true, &client->dev, "%s: Unable to register %s input device\n", __func__, ts->input_dev_pad->name);
