@@ -66,7 +66,7 @@ static int __lz4hc_compress_crypto(const u8 *src, unsigned int slen,
 				   u8 *dst, unsigned int *dlen, void *ctx)
 {
 	int out_len = LZ4_compress_HC(src, dst, slen,
-		*dlen, LZ4HC_DEFAULT_CLEVEL, ctx);
+		*dlen, LZ4HC_CLEVEL_DEFAULT, ctx);
 
 	if (!out_len)
 		return -EINVAL;
@@ -120,6 +120,7 @@ static int lz4hc_decompress_crypto(struct crypto_tfm *tfm, const u8 *src,
 
 static struct crypto_alg alg_lz4hc = {
 	.cra_name		= "lz4hc",
+	.cra_driver_name	= "lz4hc-generic",
 	.cra_flags		= CRYPTO_ALG_TYPE_COMPRESS,
 	.cra_ctxsize		= sizeof(struct lz4hc_ctx),
 	.cra_module		= THIS_MODULE,
