@@ -577,7 +577,6 @@ struct sk_filter {
 	struct bpf_prog	*prog;
 };
 
-<<<<<<< HEAD
 #if IS_ENABLED(CONFIG_BPF_JIT) && IS_ENABLED(CONFIG_CFI_CLANG)
 /*
  * With JIT, the kernel makes an indirect call to dynamically generated
