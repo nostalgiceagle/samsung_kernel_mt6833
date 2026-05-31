@@ -1,5 +1,9 @@
 # Galaxy A13 5G Kernel
 
+> [!WARNING]
+> Half baked branch, not fully finished, better dont play with it.
+> Instead use "equinoX-225" branch, tested and stable.
+
 > [!NOTE]
 > Feel free to FORK or create PR.
 
